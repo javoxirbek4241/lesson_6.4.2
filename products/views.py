@@ -100,12 +100,25 @@ class WatchCreate(View):
 #         form = WatchForm(instance=watch)
 #     return render(request, 'watch_update.html', {'form':form})
     
-class WatchUpdate(UpdateView):
-    model = Watch
-    form_class = WatchForm
-    template_name = 'watch_update.html'
-    success_url = reverse_lazy('watch')
+# class WatchUpdate(UpdateView):
+#     model = Watch
+#     form_class = WatchForm
+#     template_name = 'watch_update.html'
+#     success_url = reverse_lazy('watch')
 
+class Watchupdate(View):
+    def get(self, request):
+        watch = get_object_or_404(Watch, id=pk)
+        form = WatchForm()
+
+    def post(self, request):
+        form = WatchForm(request.POST, request.FILES, instance=watch)
+        if form.is_valid():
+            form.save()
+            return redirect('watch-detail', watch.id)
+        else:
+            form = WatchForm(instance=watch)
+        return render(request, 'watch_update.html', {'form':form})
 
 # def delete_watch(request, pk):
 #     watch = get_object_or_404(Watch, id=pk)
